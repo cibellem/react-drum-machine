@@ -1,5 +1,5 @@
 # React Drum Machine
 
-## Part of Coder Byte Coding Challenge
+## Part of Coderbyte Coding Challenge
 
 ![gif](drum-gif.gif)
