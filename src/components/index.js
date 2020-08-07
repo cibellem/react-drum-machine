@@ -88,7 +88,7 @@ function Drum() {
   };
 
   return (
-    <Container id="drum-machine" className="p-3">
+    <Container id="drum-machine" className="p-5">
       <Jumbotron className="jumbotron" id="display">
         <h3 className="text-center">React Drum Machine</h3>
         <h5 className="text-center">Listening to: {display}</h5>
