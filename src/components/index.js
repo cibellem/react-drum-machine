@@ -1,74 +1,119 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
-function Drum() {
-  const letterSounds = [
-    {
-      letter: "Q",
-      sound: "beep",
-    },
-    {
-      letter: "W",
-      sound: "clap",
-    },
-    {
-      letter: "E",
-      sound: "bell",
-    },
-    {
-      letter: "A",
-      sound: "cough",
-    },
-    {
-      letter: "S",
-      sound: "firecrackers",
-    },
-    {
-      letter: "D",
-      sound: "pew",
-    },
-    {
-      letter: "Z",
-      sound: "egg-cracking",
-    },
-    {
-      letter: "X",
-      sound: "sush",
-    },
-    {
-      letter: "C",
-      sound: "neck-snap",
-    },
-  ];
+//got the audios from FCC
 
-  function handleClick(item) {
-    console.log(item.target);
-  }
+const letterSounds = [
+  {
+    letter: "Q",
+    sound: "Heater",
+    key: 81,
+    media: "https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3",
+  },
+  {
+    letter: "W",
+    sound: "Heater v2",
+    key: 87,
+    media: "https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3",
+  },
+  {
+    letter: "E",
+    sound: "Heater v4",
+    key: 69,
+    media: "https://s3.amazonaws.com/freecodecamp/drums/Heater-4_1.mp3",
+  },
+  {
+    letter: "A",
+    sound: "Heater v3",
+    key: 65,
+    media: "https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3",
+  },
+  {
+    letter: "S",
+    sound: "Heater v6",
+    key: 65,
+    media: "https://s3.amazonaws.com/freecodecamp/drums/Heater-6.mp3",
+  },
+  {
+    letter: "D",
+    sound: "Kick 'n Hat",
+    key: 68,
+    media: "https://s3.amazonaws.com/freecodecamp/drums/Kick_n_Hat.mp3",
+  },
+  {
+    letter: "Z",
+    sound: "Kick",
+    key: 90,
+    media: "https://s3.amazonaws.com/freecodecamp/drums/RP4_KICK_1.mp3",
+  },
+  {
+    letter: "X",
+    sound: "Shush",
+    key: 88,
+    media: require("./sounds/shush.wav"),
+  },
+  {
+    letter: "C",
+    sound: "Cymbal",
+    key: 67,
+    media: "https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3",
+  },
+];
+
+function Drum() {
+  //set initial display
+  const [display, setDisplay] = useState("");
+
+  useEffect(() => {
+    //add  listener for user's keydown
+    window.addEventListener("keydown", drumPlay);
+    return () => {
+      window.removeEventListener("keydown", drumPlay);
+    };
+  }, []);
+
+  const drumPlay = (e) => {
+    //check if action was by keydown or click
+    let keyEntered = e.key ? e.key.toUpperCase() : e.target.innerText;
+    let letterObj = letterSounds.filter((item) => item.letter === keyEntered);
+    letterObj.forEach((item) => {
+      setDisplay(item.sound);
+      let audio = document.getElementById(keyEntered);
+      audio.currentTime = 0;
+      audio.play();
+    });
+  };
+
   return (
     <Container id="drum-machine" className="p-3">
-      <Jumbotron id="display">
-        <p>You pressed: </p>
-
-        <Row>
+      <Jumbotron className="jumbotron" id="display">
+        <h3 className="text-center">React Drum Machine</h3>
+        <h5 className="text-center">Listening to: {display}</h5>
+        <Row className=" justify-content-center ">
           {letterSounds.map((item) => (
-            <Col>
-              {" "}
+            <Col md={2} className="colum-drums  ">
               <div
-                onClick={(item) => handleClick(item)}
-                key={item.letter}
+                onClick={(e) => drumPlay(e)}
+                key={item.key}
                 id={item.sound}
-                className="drumpad"
+                className="drum-pad"
+                value={item.letter}
               >
-                <kbd>{item.letter}</kbd>
-                <audio id={item.letter} src="" className="clip"></audio>
+                <h4>{item.letter}</h4>
+                <audio
+                  id={item.letter}
+                  src={item.media}
+                  className="clip"
+                ></audio>
               </div>
             </Col>
           ))}
         </Row>
       </Jumbotron>
+      <h5 className="text-center mt-5">Cibelle Montor 2020</h5>
     </Container>
   );
 }
